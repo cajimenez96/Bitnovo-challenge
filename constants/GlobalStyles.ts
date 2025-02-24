@@ -1,4 +1,16 @@
 import { StyleSheet } from "react-native";
+import { MD3LightTheme as DefaultTheme } from "react-native-paper";
+
+export const theme = {
+  ...DefaultTheme,
+  colors: {
+    text: "#000",
+    placeholder: "#A8AFB9",
+    elevation: {
+      level3: "#FFFFFF",
+    }
+  },
+};
 
 export const GlobalStyles = StyleSheet.create({
   fontItem_400: {
