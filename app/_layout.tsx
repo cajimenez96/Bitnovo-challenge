@@ -1,20 +1,52 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
+import 'react-native-reanimated';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
-import 'react-native-reanimated';
+import { View } from 'react-native';
+import CustomText from '@/components/CustomText';
+import { Colors } from '@/constants/Colors';
+import { PaperProvider } from 'react-native-paper';
+import { theme } from '@/constants/GlobalStyles';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
+import {
+  useFonts,
+  Mulish_400Regular,
+  Mulish_500Medium,
+  Mulish_600SemiBold,
+  Mulish_700Bold,
+} from '@expo-google-fonts/mulish';
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
+const CustomHeader = ({text}: {text: string}) => {
+  return (
+      <CustomText
+        weight='700'
+        color={Colors.blue}
+        size={18}
+        style={{marginHorizontal: 'auto'}}
+      >
+        {text}
+      </CustomText>
+  );
+};
+
+const CustomRightHeader = () => {
+  return (
+    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+
+    </View>
+  )
+};
+
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
   const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    Mulish_400Regular,
+    Mulish_500Medium,
+    Mulish_600SemiBold,
+    Mulish_700Bold,
   });
 
   useEffect(() => {
@@ -28,12 +60,19 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <SafeAreaProvider>
+      <PaperProvider theme={theme}>
+        <StatusBar style="auto" />
+        <Stack screenOptions={{ contentStyle: {backgroundColor: Colors.white, padding: 10} }}>
+          <Stack.Screen
+            name="index"
+            options={{
+              headerTitle: () => <CustomHeader text="Crear pago" />,
+              headerRight: () => <CustomRightHeader />
+            }}
+          />
+        </Stack>
+      </PaperProvider>
+    </SafeAreaProvider>
   );
 }
