@@ -1,15 +1,11 @@
+import { useEffect } from 'react';
 import 'react-native-reanimated';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
-import { View } from 'react-native';
-import CustomText from '@/components/CustomText';
-import { Colors } from '@/constants/Colors';
 import { PaperProvider } from 'react-native-paper';
 import { theme } from '@/constants/GlobalStyles';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-
+import { Colors } from '@/constants/Colors';
 import {
   useFonts,
   Mulish_400Regular,
@@ -17,29 +13,11 @@ import {
   Mulish_600SemiBold,
   Mulish_700Bold,
 } from '@expo-google-fonts/mulish';
+import Header from '@/components/Header';
+import { StyleSheet } from 'react-native';
+import { CurrencyProvider } from '@/context/CurrencyContext';
 
 SplashScreen.preventAutoHideAsync();
-
-const CustomHeader = ({text}: {text: string}) => {
-  return (
-      <CustomText
-        weight='700'
-        color={Colors.blue}
-        size={18}
-        style={{marginHorizontal: 'auto'}}
-      >
-        {text}
-      </CustomText>
-  );
-};
-
-const CustomRightHeader = () => {
-  return (
-    <View style={{flexDirection: 'row', alignItems: 'center'}}>
-
-    </View>
-  )
-};
 
 export default function RootLayout() {
   const [loaded] = useFonts({
@@ -60,19 +38,24 @@ export default function RootLayout() {
   }
 
   return (
-    <SafeAreaProvider>
+    <CurrencyProvider>
       <PaperProvider theme={theme}>
         <StatusBar style="auto" />
-        <Stack screenOptions={{ contentStyle: {backgroundColor: Colors.white, padding: 10} }}>
+        <Stack screenOptions={{ contentStyle:  styles.container}}>
           <Stack.Screen
             name="index"
             options={{
-              headerTitle: () => <CustomHeader text="Crear pago" />,
-              headerRight: () => <CustomRightHeader />
-            }}
-          />
+              header: () => <Header title="Crear pago" right />,
+            }} />
         </Stack>
       </PaperProvider>
-    </SafeAreaProvider>
+    </CurrencyProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.white,
+  }
+})
