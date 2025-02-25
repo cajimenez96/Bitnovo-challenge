@@ -3,4 +3,5 @@ export const Colors = {
   white: 'rgba(255, 255, 255, 1)',
   buttonBg: 'rgba(239, 242, 247, 1)',
   border: 'rgba(96, 97, 112, 0.16)',
+  check: '#71B0FD',
 };
