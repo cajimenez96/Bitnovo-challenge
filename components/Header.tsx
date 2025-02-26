@@ -6,6 +6,8 @@ import { Colors } from '@/constants/Colors';
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import CustomModal from './CustomModal';
 import { useCurrency } from '@/context/CurrencyContext';
+import CustomSearchbar from './CustomSearchbar';
+import ItemFiat from './ItemFiat';
 
 interface IHeader {
   title: string;
@@ -31,16 +33,22 @@ export const LeftButton = ({handleClick}: ILeftButton) => {
 
 
 const Header = ({ title, right = false, left = false}: IHeader) => {
-  const navigation = useNavigation();
-  const [showModal, setShowModal] = useState<boolean>(false);
+    const { state, dispatch } = useCurrency();
+    const originalListCurrency = state.currencyList;
+    const abb = state.currencyAbb;
+
+  const navigation = useNavigation();                                                                                                                                                                                                                                                 
+  const [showModal, setShowModal] = useState(false);
+  const [listCurrency, setListCurrency] = useState(originalListCurrency);
   
   const handleBack = () => navigation.goBack();
+
   const handleOpenModal = () => setShowModal(true);
 
-
-  const { state, dispatch } = useCurrency();
-  const abb = state.currencyAbb;
-
+  const changeCurrency = (abbSelected: string, symbolSelected: string) => {
+    dispatch({ type: 'SET_FIAT_DATA', payload: {abb: abbSelected, symbol: symbolSelected} });
+    setShowModal(false);
+  };
 
 
   return (
@@ -74,7 +82,35 @@ const Header = ({ title, right = false, left = false}: IHeader) => {
         </Pressable>
       ) : (<View />)}
 
-      <CustomModal show={showModal} setShowModal={setShowModal} />
+      <CustomModal
+        show={showModal}
+        setShowModal={setShowModal}
+        title={"Selecciona una divisa"}
+      >
+        <View style={{gap: 20}}>
+          <View style={styles.bodyContainer}>
+            <CustomSearchbar
+              data={originalListCurrency}
+              setFiltered={setListCurrency}
+            />
+
+            <View style={styles.abbStyle}>
+              {listCurrency.map((item, index) => (
+                <ItemFiat
+                  key={index}
+                  id={item.id}
+                  abb={item.abb}
+                  flag={item.flag}
+                  name={item.name}
+                  symbol={item.symbol}
+                  handleClick={changeCurrency}
+                  check={state.currencyAbb === item.abb}
+                />
+              ))}
+            </View>
+          </View>
+        </View>
+      </CustomModal>
     </View>
   )
 }
@@ -112,4 +148,13 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     backgroundColor: Colors.buttonBg,
   },
+  bodyContainer: {
+    paddingHorizontal: 10,
+    paddingVertical: 10
+  },
+  abbStyle: {
+    marginTop: '5%',
+    gap: 20,
+    padding: 10
+  }
 })

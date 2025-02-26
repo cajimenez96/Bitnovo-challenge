@@ -10,10 +10,12 @@ import CustomSearchbar from './CustomSearchbar';
 
 interface ICustomModal {
   show: boolean;
+  title?: string;
+  children: React.ReactNode;
   setShowModal: (show: boolean) => void;
 }
 
-const CustomModal = ({show, setShowModal}: ICustomModal) => {
+const CustomModal = ({show, title, children, setShowModal}: ICustomModal) => {
   const { state, dispatch } = useCurrency();
   const originalListCurrency = state.currencyList;
   const [listCurrency, setListCurrency] = useState(originalListCurrency);
@@ -32,45 +34,19 @@ const CustomModal = ({show, setShowModal}: ICustomModal) => {
       animationType={"slide"}
     >
       <View style={styles.container}>
-          <View style={{gap: 20}}>
-            <View style={styles.headerContainer}>
-              <LeftButton handleClick={closeModal} />
-              <CustomText
-                weight='700'
-                size={18}
-                color={Colors.blue}
-              >
-                Selecciona una divisa
-              </CustomText>
-              <View />
-            </View>
-
-            <View>
-
-              <View style={styles.bodyContainer}>
-                <CustomSearchbar
-                  data={originalListCurrency}
-                  setFiltered={setListCurrency}
-                />
-              </View>
-
-              <View style={styles.abbStyle}>
-                {listCurrency.map((item, index) => (
-                  <ItemFiat
-                    key={index}
-                    id={item.id}
-                    abb={item.abb}
-                    flag={item.flag}
-                    name={item.name}
-                    symbol={item.symbol}
-                    handleClick={changeCurrency}
-                    check={state.currencyAbb === item.abb}
-                  />
-                ))}
-              </View>
-            </View>
-
-          </View>
+        <View style={styles.headerContainer}>
+          <LeftButton handleClick={closeModal} />
+          <CustomText
+            weight='700'
+            size={18}
+            color={Colors.blue}
+          >
+            {title}
+          </CustomText>
+          <View />
+        </View>
+        
+        {children}
       </View>
     </Modal>
   )
@@ -84,18 +60,9 @@ const styles = StyleSheet.create({
     paddingTop: '5%',
     backgroundColor: Colors.white
   },
-  bodyContainer: {
-    paddingHorizontal: 10,
-    paddingVertical: 10
-  },
   headerContainer: {
     flexDirection: 'row',
     paddingHorizontal: 10,
     gap: '20%'
   },
-  abbStyle: {
-    marginTop: '5%',
-    gap: 20,
-    padding: 10
-  }
 });
