@@ -1,7 +1,7 @@
 import { FontWeight } from '@/constants/GlobalStyles';
 import { Text, type TextProps, ColorValue, StyleSheet } from 'react-native';
 
-export type ThemedTextProps = TextProps & {
+export type ICustomText = TextProps & {
   children: React.ReactNode;
   size?: number;
   color?: ColorValue | string;
@@ -15,7 +15,7 @@ const CustomText = ({
   size = 14,
   weight = '400',
   ...rest
-}: ThemedTextProps) => {
+}: ICustomText) => {
   return (
     <Text
       style={[

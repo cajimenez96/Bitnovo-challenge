@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { DimensionValue, Pressable, StyleSheet, View } from 'react-native';
 import CustomText from './CustomText';
 import { Icon } from 'react-native-paper';
 import { shareButtonIcon } from '@/constants/Images';
@@ -8,16 +8,24 @@ import { Colors } from '@/constants/Colors';
 interface IShareButton {
   icon: 'link' | 'email' | 'whatsapp' | 'others';
   title: string;
+  width?: DimensionValue;
   handleClick: () => void;
 }
 
-const ShareButton = ({icon, title, handleClick}: IShareButton) => {
+const ShareButton = ({icon, title, width = '100%', handleClick}: IShareButton) => {
   return (
-    <Pressable style={styles.btnContainer} onPress={handleClick}>
+    <Pressable style={[styles.btnContainer, {width: width}]} onPress={handleClick}>
       <View style={styles.iconContainer}>
         <Icon source={shareButtonIcon[icon]} size={20} />
       </View>
-      <CustomText color={Colors.blue}>{title}</CustomText>
+      <CustomText
+        color={Colors.blue}
+        style={{flexShrink: 1}}
+        numberOfLines={1}
+        ellipsizeMode='tail'
+      >
+        {title}
+      </CustomText>
     </Pressable>
   )
 }
