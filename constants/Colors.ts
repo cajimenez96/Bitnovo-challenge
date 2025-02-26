@@ -7,5 +7,6 @@ export const Colors = {
   input: 'rgba(3, 90, 197, 1)',
   placeholder: 'rgba(192, 204, 218, 1)',
   disabled: 'rgba(234, 243, 255, 1)',
-  textGrey: 'rgba(100, 113, 132, 1)'
+  textGrey: 'rgba(100, 113, 132, 1)',
+  bgCard: 'rgba(249, 250, 252, 1)'
 };
