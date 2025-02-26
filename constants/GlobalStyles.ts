@@ -13,6 +13,13 @@ export const theme = {
 };
 
 export const GlobalStyles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
+  padding: {
+    paddingHorizontal: 20,
+    paddingVertical: 20
+  },
   fontItem_400: {
     fontFamily: 'Mulish_400Regular',
   },
