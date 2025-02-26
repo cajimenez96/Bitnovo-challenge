@@ -1,22 +1,22 @@
-import { StyleSheet, View, TextInput } from 'react-native';
-import { useCurrency } from '@/context/CurrencyContext';
-import { Colors } from '@/constants/Colors';
 import { useState } from 'react';
-import { GlobalStyles } from '@/constants/GlobalStyles';
-
-import CurrencyInput from 'react-native-currency-input';
+import { useNavigation } from 'expo-router';
+import { StyleSheet, View, TextInput } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
+import { useCurrency } from '@/context/CurrencyContext';
 import CustomText from '@/components/CustomText';
 import CustomButton from '@/components/CustomButton';
 import { orderCreate } from '@/services/Order.service';
-import { ActivityIndicator } from 'react-native-paper';
-
-const MAX_CHARACTERS = 140;
+import { MAX_CHARACTERS } from '@/utils/utils';
+import CustomCurrencyInput from '@/components/CustomCurrencyInput';
+import { GlobalStyles } from '@/constants/GlobalStyles';
+import { Colors } from '@/constants/Colors';
 
 
 export default function HomeScreen() {
+  const navigation = useNavigation();
   const { state, dispatch } = useCurrency();
 
-  const [amount, setAmount] = useState(state.currencyMount);
+  const [amount, setAmount] = useState(state.currencyAmount);
   const [noteLength, setNoteLength] = useState(0);
   const [note, setNote] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -32,10 +32,7 @@ export default function HomeScreen() {
     }
   };
 
-
   const handleSubmit = async () => {
-    setIsLoading(true);
-
     const orderDataTest = {
       expected_output_amount: amount,
       fiat: abb,
@@ -47,12 +44,20 @@ export default function HomeScreen() {
       nif: "12345678A",
     };
 
-    dispatch({ type: "SET_MOUNT", payload: amount });
+    setIsLoading(true);
+    dispatch({ type: 'CREATE_ORDER_PENDING' });
 
-    await orderCreate(orderDataTest)
-    .then((res) => console.log(res))
-    .catch((err) => console.log(err))
-    .finally(() => setIsLoading(false))
+    try {
+      const response = await orderCreate(orderDataTest);
+      dispatch({ type: "SET_AMOUNT", payload: amount });
+      dispatch({ type: "CREATE_ORDER_FULFILLED", payload: response });
+      navigation.navigate('shareOptions');
+    } catch (error: any) {
+      dispatch({ type: "CREATE_ORDER_FAILURE", payload: error.message });
+      console.error("Error al crear la orden:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
 
@@ -61,21 +66,12 @@ export default function HomeScreen() {
 
       <View>
         <View style={styles.mountContainer}>
-          <CurrencyInput
-            value={amount}
-            prefix={abb === 'EUR' ? '' : symbol}
-            suffix={abb === 'EUR' ? symbol : ''}
-            delimiter="."
-            separator=","
-            precision={2}
-            minValue={0}
-            style={[
-              {color: amount === 0 ? Colors.placeholder : Colors.input},
-              styles.input
-            ]}
-            placeholder='0,00'
-            onChangeValue={setAmount}
-            />
+          <CustomCurrencyInput
+            amount={amount}
+            currency={abb}
+            symbol={symbol}
+            setAmount={setAmount}
+          />
         </View>
 
         <View style={{gap: 10}}>
@@ -125,11 +121,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     height: 100
-  },
-  input: {
-    fontWeight: "700",
-    fontSize: 40,
-    paddingHorizontal: 10,
   },
   textInput: {
     borderWidth: 1,
