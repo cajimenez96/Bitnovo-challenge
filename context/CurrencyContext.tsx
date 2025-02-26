@@ -1,5 +1,5 @@
 import React, { createContext, useReducer, useContext, ReactNode } from "react";
-import { ordersCreate, ResponseData, PostData } from "../services/Order.service";
+import { CreateOrderResponse } from "../services/Order.service";
 
 // Definimos los tipos
 interface CurrencyItem {
@@ -11,20 +11,20 @@ interface CurrencyItem {
 }
 
 interface CurrencyState {
-  currencyMount: number;
+  currencyAmount: number;
   currencyAbb: "EUR" | "USD" | "GBP";
   currencySymbol: string;
   currencyList: CurrencyItem[];
   isBottomSheetOpen: boolean;
   loading: "idle" | "pending" | "fulfilled" | "rejected";
-  data: ResponseData | null;
+  data: CreateOrderResponse | null;
   webUrl: string;
   error: string | null;
 }
 
 // Estado inicial
 const initialState: CurrencyState = {
-  currencyMount: 0,
+  currencyAmount: 0,
   currencyAbb: "EUR",
   currencySymbol: "€",
   isBottomSheetOpen: false,
@@ -50,20 +50,20 @@ const CurrencyContext = createContext<{
 
 // Definimos las acciones
 type Action =
-  | { type: "SET_MOUNT"; payload: number }
+  | { type: "SET_AMOUNT"; payload: number }
   | { type: "SET_FIAT_DATA"; payload: { abb: "EUR" | "USD" | "GBP"; symbol: string } }
   | { type: "SET_WEB_URL"; payload: string }
   | { type: "SET_BOTTOM_SHEET_OPEN"; payload: boolean }
   | { type: "RESET_DATA" }
   | { type: "CREATE_ORDER_PENDING" }
-  | { type: "CREATE_ORDER_FULFILLED"; payload: ResponseData }
+  | { type: "CREATE_ORDER_FULFILLED"; payload: CreateOrderResponse }
   | { type: "CREATE_ORDER_REJECTED"; payload: string };
 
 // Reducer
 const currencyReducer = (state: CurrencyState, action: Action): CurrencyState => {
   switch (action.type) {
-    case "SET_MOUNT":
-      return { ...state, currencyMount: action.payload };
+    case "SET_AMOUNT":
+      return { ...state, currencyAmount: action.payload };
     case "SET_FIAT_DATA":
       return {
         ...state,
@@ -75,7 +75,7 @@ const currencyReducer = (state: CurrencyState, action: Action): CurrencyState =>
     case "SET_BOTTOM_SHEET_OPEN":
       return { ...state, isBottomSheetOpen: action.payload };
     case "RESET_DATA":
-      return { ...state, data: null };
+      return { ...state, data: null, currencyAmount: 0, webUrl: "" };
     case "CREATE_ORDER_PENDING":
       return { ...state, loading: "pending", error: null };
     case "CREATE_ORDER_FULFILLED":
