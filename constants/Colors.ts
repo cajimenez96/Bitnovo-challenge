@@ -10,5 +10,6 @@ export const Colors = {
   disabled: 'rgba(234, 243, 255, 1)',
   bgAlert: 'rgba(234, 243, 255, 1)',
   textGrey: 'rgba(100, 113, 132, 1)',
-  bgCard: 'rgba(249, 250, 252, 1)'
+  bgCard: 'rgba(249, 250, 252, 1)',
+  bgModal: 'rgba(0, 0, 0, 0.5)'
 };

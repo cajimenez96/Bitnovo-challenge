@@ -39,7 +39,7 @@ const ShareButton = ({
       setIsEditing(true);
       return;
     }
-    handleClick;
+    handleClick();
   };
 
   const changeCountry = (name: string, code: string) => {
