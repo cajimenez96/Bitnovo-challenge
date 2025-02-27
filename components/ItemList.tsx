@@ -6,24 +6,30 @@ import CustomText from './CustomText';
 import { Colors } from '@/constants/Colors';
 import { countryFlag } from '@/constants/Images';
 
-interface IItemFiat {
-  id: number;
-  abb: string;
+interface IItemList {
   flag: string;
   name: string;
-  symbol: string;
+  text: string;
+  code: string;
   check: boolean;
-  handleClick: (abb: string, symbol: string) => void;
+  handleClick?: (text: string, code: string) => void;
 }
 
-const ItemFiat = ({id, abb, flag, name, symbol, check, handleClick}: IItemFiat) => {
+const ItemList = ({
+  flag,
+  name,
+  text,
+  code,
+  check,
+  handleClick
+}: IItemList) => {
   return (
-    <Pressable style={styles.container} onPress={() => handleClick(abb, symbol)}>
+    <Pressable style={styles.container} onPress={() => handleClick && handleClick(text, code)}>
       <View style={styles.info}>
         <Avatar.Image source={countryFlag[flag]} size={32} />
         <View>
           <CustomText>{name}</CustomText>
-          <CustomText>{abb}</CustomText>
+          <CustomText>{text}</CustomText>
         </View>
       </View>
       
@@ -36,7 +42,7 @@ const ItemFiat = ({id, abb, flag, name, symbol, check, handleClick}: IItemFiat) 
   )
 }
 
-export default ItemFiat;
+export default ItemList;
 
 const styles = StyleSheet.create({
   container: {
