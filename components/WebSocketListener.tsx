@@ -3,6 +3,8 @@ import { ToastAndroid } from "react-native";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { useCurrency } from "@/context/CurrencyContext";
 import { WS } from "@/utils/utils";
+import { router } from "expo-router";
+import Toast from "react-native-toast-message";
 
 const WebSocketListener = () => {
   const navigation = useNavigation<NavigationProp<any>>();
@@ -31,14 +33,18 @@ const WebSocketListener = () => {
         // Si el pago se completa, actualiza la URL en el contexto
         if (jsonData?.status === completedPaymentFlag) {
           dispatch({ type: "SET_WEB_URL", payload: data.web_url || "" });
-          navigation.navigate("PaymentSuccessScreen");
+          router.push('/success');
         }
 
         // Si el pago se cancela, muestra un mensaje y redirige
         if (jsonData?.status === cancelledPaymentFlag) {
-          // dispatch({ type: 'RESET_DATA' });
-          navigation.navigate("index", {});
-          ToastAndroid.show("Se ha cancelado el pago.", ToastAndroid.LONG);
+          dispatch({ type: 'RESET_DATA' });
+          router.push('/');
+          Toast.show({
+            type: 'error',
+            position: 'bottom',
+            text1: 'Pago cancelado'
+          })
         }
       };
 
@@ -59,7 +65,7 @@ const WebSocketListener = () => {
     }
   }, [data, dispatch, navigation]);
 
-  return null;
+  return <Toast />;
 };
 
 export default WebSocketListener;
