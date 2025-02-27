@@ -41,7 +41,7 @@ export default function RootLayout() {
   return (
     <CurrencyProvider>
       <PaperProvider theme={theme}>
-        <StatusBar style="auto" />
+        <StatusBar style="dark" />
         <Stack screenOptions={{ contentStyle:  styles.container}}>
           <Stack.Screen
             name="index"
