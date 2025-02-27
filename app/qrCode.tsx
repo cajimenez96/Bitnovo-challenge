@@ -15,11 +15,14 @@ const qrCode = () => {
   const webUrl = state.webUrl;
   const symbol = state.currencySymbol;
 
-  const [webUrlState, setWebUrlState] = useState('');
-
+  const [webUrlToShow, setWebUrlToShow] = useState<string>(
+    "https://paytest.bitnovo.com/f16a139c"
+  );
+  
   useEffect(() => {
-    setWebUrlState(webUrl.length > 0 ? webUrl : '')
-  }, [webUrl])
+    if (webUrl.length > 0) setWebUrlToShow(webUrl);
+  }, [webUrl]);
+
 
   return (
     <View style={styles.container}>
@@ -32,7 +35,7 @@ const qrCode = () => {
 
       <View style={styles.QRContainer}>
         <QRCode
-          value={webUrlState}
+          value={webUrlToShow}
           logo={Images.bitnovoLogo}
           logoSize={50}
           logoMargin={5}
@@ -56,7 +59,7 @@ const qrCode = () => {
   )
 }
 
-export default qrCode
+export default qrCode;
 
 const styles = StyleSheet.create({
   container: {
