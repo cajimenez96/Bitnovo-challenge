@@ -42,7 +42,7 @@ const shareOptions = () => {
   };
 
   const sendToPhoneNumber = (phone: string) => {
-    console.log(phone)
+    console.log({phone, webUrl});
     if (validatePhone(phone))
       Linking.openURL(
         "whatsapp://send?text=" +
