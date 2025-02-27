@@ -1,7 +1,8 @@
-import React from 'react'
-import { ScrollView, StyleSheet, ToastAndroid, View } from 'react-native'
+import React, { useState } from 'react'
+import { Linking, ScrollView, StyleSheet, ToastAndroid, View } from 'react-native'
 import { Icon } from 'react-native-paper';
 import * as Clipboard from "expo-clipboard";
+import * as Sharing from 'expo-sharing';
 import { useNavigation } from 'expo-router';
 import CardPayment from '@/components/CardPayment';
 import CustomButton from '@/components/CustomButton';
@@ -10,10 +11,14 @@ import ShareButton from '@/components/ShareButton';
 import { Images } from '@/constants/Images';
 import { useCurrency } from '@/context/CurrencyContext';
 import { Colors } from '@/constants/Colors';
+import { validatePhone } from '@/utils/utils';
 
 const shareOptions = () => {
   const navigation = useNavigation();
   const { state, dispatch } = useCurrency();
+
+  const [email, setEmail] = useState('');
+  const [whatsapp, setWhatsapp] = useState('');
 
   const amount = state.currencyAmount;
   const abb = state.currencyAbb;
@@ -29,6 +34,33 @@ const shareOptions = () => {
     await Clipboard.setStringAsync(webUrl);
     ToastAndroid.show("Link copiado en portapapeles", ToastAndroid.SHORT);
   }
+
+  const sendToMail = () => {
+    Linking.openURL(
+      `mailto:${email}?subject=Payment&body=${webUrl}`
+    );
+  };
+
+  const sendToPhoneNumber = (phone: string) => {
+    console.log(phone)
+    if (validatePhone(phone))
+      Linking.openURL(
+        "whatsapp://send?text=" +
+          "El link de pago para tu compra es: " +
+          webUrl +
+          "&phone=" +
+          whatsapp
+      );
+    else
+      ToastAndroid.show("Debe ingresar un número valido.", ToastAndroid.LONG);
+  };
+
+  const shareOthers =  () => {
+    console.log('hola')
+    Sharing.shareAsync(webUrl, {
+      dialogTitle: 'Compartir enlace',
+    });
+  }
   
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -43,7 +75,7 @@ const shareOptions = () => {
           <View style={styles.linkContent}>
             <ShareButton
               title={webUrl || "Generando link, por favor espere..."}
-              icon="link"
+              type="link"
               width={'80%'}
               handleClick={copyLinkToClipboard}
             />
@@ -57,12 +89,26 @@ const shareOptions = () => {
 
           <ShareButton
             title={"Enviar por correo electrónico"}
-            icon="email"
+            type="email"
+            placeholder="example@example.com"
+            handleClick={sendToMail}
+            value={email}
+            setValue={setEmail}
           />
 
-          <ShareButton title={"Enviar a número de WhatsApp"} icon="whatsapp" />
+          <ShareButton
+            title={"Enviar a número de WhatsApp"}
+            type="whatsapp"
+            value={whatsapp}
+            setValue={setWhatsapp}
+            handleClick={(value) => sendToPhoneNumber(value)}
+          />
 
-          <ShareButton title={"Compartir con otras aplicaciones"} icon="others" />
+          <ShareButton
+            title={"Compartir con otras aplicaciones"}
+            type="link"
+            handleClick={shareOthers}
+          />
           
         </View>
       </View>
@@ -96,7 +142,6 @@ const styles = StyleSheet.create({
     borderColor: Colors.border
   },
   linkContent: {
-    maxWidth: '100%',
     flexDirection: 'row',
     alignItems: 'center',
   },
