@@ -12,6 +12,9 @@ export const Images = {
   emailIcon: require('../assets/icons/sms.png'),
   whatsappIcon: require('../assets/icons/whatsapp.png'),
   newOrder: require('../assets/icons/wallet-add.png'),
+  qrScan: require('../assets/icons/scan-barcode.png'),
+  infoCircle: require('../assets/icons/info-circle.png'),
+  bitnovoLogo: require('../assets/icons/bitnovo-qr.png'),
 }
 
 export const countryFlag: GenericIcons = {
