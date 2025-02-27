@@ -16,6 +16,7 @@ import {
 import Header from '@/components/Header';
 import { StyleSheet } from 'react-native';
 import { CurrencyProvider } from '@/context/CurrencyContext';
+import WebSocketListener from '@/components/WebSocketListener';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -47,7 +48,19 @@ export default function RootLayout() {
             options={{
               header: () => <Header title="Crear pago" right />,
             }} />
+          <Stack.Screen
+            name="shareOptions"
+            options={{
+              headerTitle: "",
+              headerBackVisible: false
+            }} />
+          <Stack.Screen
+            name="qrCode"
+            options={{
+              header: () => <Header title="" left />,
+            }} />
         </Stack>
+        <WebSocketListener />
       </PaperProvider>
     </CurrencyProvider>
   );
