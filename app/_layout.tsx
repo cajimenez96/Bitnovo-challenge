@@ -3,7 +3,7 @@ import 'react-native-reanimated';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { PaperProvider } from 'react-native-paper';
+import { Icon, PaperProvider } from 'react-native-paper';
 import { theme } from '@/constants/GlobalStyles';
 import { Colors } from '@/constants/Colors';
 import {
@@ -14,9 +14,10 @@ import {
   Mulish_700Bold,
 } from '@expo-google-fonts/mulish';
 import Header from '@/components/Header';
-import { StyleSheet } from 'react-native';
+import { SafeAreaView, StyleSheet } from 'react-native';
 import { CurrencyProvider } from '@/context/CurrencyContext';
 import WebSocketListener from '@/components/WebSocketListener';
+import { Images } from '@/constants/Images';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -38,6 +39,12 @@ export default function RootLayout() {
     return null;
   }
 
+  const HeaderSuccess = () => (
+    <SafeAreaView style={{alignItems: 'center', marginTop: 15}}>
+      <Icon source={Images.bitnovoSuccess} size={88}/>
+    </SafeAreaView>
+  );
+
   return (
     <CurrencyProvider>
       <PaperProvider theme={theme}>
@@ -58,6 +65,11 @@ export default function RootLayout() {
             name="qrCode"
             options={{
               header: () => <Header title="" left />,
+            }} />
+          <Stack.Screen
+            name="success"
+            options={{
+              header: () => <HeaderSuccess />,
             }} />
         </Stack>
         <WebSocketListener />

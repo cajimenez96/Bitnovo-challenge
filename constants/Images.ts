@@ -24,6 +24,8 @@ export const Images = {
   infoCircle: require('../assets/icons/info-circle.png'),
   bitnovoLogo: require('../assets/icons/bitnovo-qr.png'),
   success: require('../assets/icons/check-circle.png'),
+  successScreen: require('../assets/images/success-screen.png'),
+  bitnovoSuccess: require('../assets/images/Bitnovo-pay.png'),
 }
 
 export const countryFlag: GenericIcons = {
