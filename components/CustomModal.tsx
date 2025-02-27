@@ -1,12 +1,8 @@
-import { Modal, StyleSheet, Text, View, Pressable } from 'react-native';
-import React, { useState } from 'react';
-import { useNavigation } from 'expo-router';
+import { Modal, StyleSheet, View } from 'react-native';
+import React from 'react';
 import { LeftButton } from './Header';
 import CustomText from './CustomText';
 import { Colors } from '@/constants/Colors';
-import { useCurrency } from '@/context/CurrencyContext';
-import ItemFiat from './ItemFiat';
-import CustomSearchbar from './CustomSearchbar';
 
 interface ICustomModal {
   show: boolean;
@@ -16,16 +12,7 @@ interface ICustomModal {
 }
 
 const CustomModal = ({show, title, children, setShowModal}: ICustomModal) => {
-  const { state, dispatch } = useCurrency();
-  const originalListCurrency = state.currencyList;
-  const [listCurrency, setListCurrency] = useState(originalListCurrency);
-
   const closeModal = () => setShowModal(!show);
-
-  const changeCurrency = (abbSelected: string, symbolSelected: string) => {
-    dispatch({ type: 'SET_FIAT_DATA', payload: {abb: abbSelected, symbol: symbolSelected} });
-    closeModal();
-  };
 
   return (
     <Modal
