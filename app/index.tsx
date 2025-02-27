@@ -102,7 +102,11 @@ export default function HomeScreen() {
           
 
           
-          <CustomButton handleClick={handleSubmit} disabled={amount === 0 || isLoading} style={styles.button}>
+          <CustomButton
+            handleClick={handleSubmit}
+            disabled={amount === 0 || isLoading}
+            style={styles.button}
+          >
             <CustomText
               weight='600'
               size={16}

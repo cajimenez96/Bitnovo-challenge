@@ -15,7 +15,6 @@ interface CurrencyState {
   currencyAbb: "EUR" | "USD" | "GBP";
   currencySymbol: string;
   currencyList: CurrencyItem[];
-  isBottomSheetOpen: boolean;
   loading: "idle" | "pending" | "fulfilled" | "rejected";
   data: CreateOrderResponse | null;
   webUrl: string;
@@ -27,7 +26,6 @@ const initialState: CurrencyState = {
   currencyAmount: 0,
   currencyAbb: "EUR",
   currencySymbol: "€",
-  isBottomSheetOpen: false,
   loading: "idle",
   data: null,
   webUrl: "",
@@ -53,7 +51,6 @@ type Action =
   | { type: "SET_AMOUNT"; payload: number }
   | { type: "SET_FIAT_DATA"; payload: { abb: "EUR" | "USD" | "GBP"; symbol: string } }
   | { type: "SET_WEB_URL"; payload: string }
-  | { type: "SET_BOTTOM_SHEET_OPEN"; payload: boolean }
   | { type: "RESET_DATA" }
   | { type: "CREATE_ORDER_PENDING" }
   | { type: "CREATE_ORDER_FULFILLED"; payload: CreateOrderResponse }
@@ -72,8 +69,6 @@ const currencyReducer = (state: CurrencyState, action: Action): CurrencyState =>
       };
     case "SET_WEB_URL":
       return { ...state, webUrl: action.payload };
-    case "SET_BOTTOM_SHEET_OPEN":
-      return { ...state, isBottomSheetOpen: action.payload };
     case "RESET_DATA":
       return { ...state, data: null, currencyAmount: 0, webUrl: "" };
     case "CREATE_ORDER_PENDING":
