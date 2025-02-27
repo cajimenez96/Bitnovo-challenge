@@ -23,6 +23,7 @@ export const Images = {
   qrScan: require('../assets/icons/scan-barcode.png'),
   infoCircle: require('../assets/icons/info-circle.png'),
   bitnovoLogo: require('../assets/icons/bitnovo-qr.png'),
+  success: require('../assets/icons/check-circle.png'),
 }
 
 export const countryFlag: GenericIcons = {
