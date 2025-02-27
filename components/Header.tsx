@@ -7,7 +7,7 @@ import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import CustomModal from './CustomModal';
 import { useCurrency } from '@/context/CurrencyContext';
 import CustomSearchbar from './CustomSearchbar';
-import ItemFiat from './ItemFiat';
+import ItemList from './ItemList';
 
 interface IHeader {
   title: string;
@@ -33,11 +33,11 @@ export const LeftButton = ({handleClick}: ILeftButton) => {
 
 
 const Header = ({ title, right = false, left = false}: IHeader) => {
-    const { state, dispatch } = useCurrency();
-    const originalListCurrency = state.currencyList;
-    const abb = state.currencyAbb;
+  const navigation = useNavigation();
+  const { state, dispatch } = useCurrency();
+  const originalListCurrency = state.currencyList;
+  const abb = state.currencyAbb;
 
-  const navigation = useNavigation();                                                                                                                                                                                                                                                 
   const [showModal, setShowModal] = useState(false);
   const [listCurrency, setListCurrency] = useState(originalListCurrency);
   
@@ -96,13 +96,12 @@ const Header = ({ title, right = false, left = false}: IHeader) => {
 
             <View style={styles.abbStyle}>
               {listCurrency.map((item, index) => (
-                <ItemFiat
+                <ItemList
                   key={index}
-                  id={item.id}
-                  abb={item.abb}
-                  flag={item.flag}
                   name={item.name}
-                  symbol={item.symbol}
+                  text={item.abb}
+                  flag={item.flag}
+                  code={item.symbol}
                   handleClick={changeCurrency}
                   check={state.currencyAbb === item.abb}
                 />
