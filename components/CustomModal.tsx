@@ -1,4 +1,4 @@
-import { Modal, StyleSheet, View } from 'react-native';
+import { SafeAreaView, Modal, StyleSheet, View, Dimensions, DimensionValue } from 'react-native';
 import React from 'react';
 import { LeftButton } from './Header';
 import CustomText from './CustomText';
@@ -7,11 +7,13 @@ import { Colors } from '@/constants/Colors';
 interface ICustomModal {
   show: boolean;
   title?: string;
+  back?: boolean;
+  customHeight?: DimensionValue;
   children: React.ReactNode;
   setShowModal: (show: boolean) => void;
 }
 
-const CustomModal = ({show, title, children, setShowModal}: ICustomModal) => {
+const CustomModal = ({show, title, children, back = true, customHeight = '100%', setShowModal}: ICustomModal) => {
   const closeModal = () => setShowModal(!show);
 
   return (
@@ -20,36 +22,50 @@ const CustomModal = ({show, title, children, setShowModal}: ICustomModal) => {
       transparent={true}
       animationType={"slide"}
     >
-      <View style={styles.container}>
-        <View style={styles.headerContainer}>
-          <LeftButton handleClick={closeModal} />
-          <CustomText
-            weight='700'
-            size={18}
-            color={Colors.blue}
-          >
-            {title}
-          </CustomText>
-          <View />
+      <View style={styles.overlay}>
+        <View style={[styles.modalContainer, {height: customHeight}]}>
+          <SafeAreaView style={styles.container}>
+            <View style={styles.headerContainer}>
+              {back && <LeftButton handleClick={closeModal} />}
+              <CustomText
+                weight='700'
+                size={18}
+                color={Colors.blue}
+              >
+                {title}
+              </CustomText>
+              <View />
+            </View>
+            
+            {children}
+          </SafeAreaView>
         </View>
-        
-        {children}
       </View>
     </Modal>
   )
 }
 
-export default CustomModal
+export default CustomModal;
 
 const styles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    backgroundColor: Colors.bgModal,
+  },
+  modalContainer: {
+    backgroundColor: Colors.white,
+    borderRadius: 8,
+    overflow: 'hidden',
+  },
   container: {
     flex: 1,
     paddingTop: '5%',
-    backgroundColor: Colors.white
   },
   headerContainer: {
     flexDirection: 'row',
     paddingHorizontal: 10,
-    gap: '20%'
-  },
+    gap: 20,
+    alignItems: 'center',
+  }
 });

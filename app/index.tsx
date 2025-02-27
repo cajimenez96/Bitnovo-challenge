@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useNavigation } from 'expo-router';
-import { StyleSheet, View, TextInput } from 'react-native';
+import { router } from 'expo-router';
+import { StyleSheet, View, TextInput, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { useCurrency } from '@/context/CurrencyContext';
 import CustomText from '@/components/CustomText';
@@ -13,7 +13,6 @@ import { Colors } from '@/constants/Colors';
 
 
 export default function HomeScreen() {
-  const navigation = useNavigation();
   const { state, dispatch } = useCurrency();
 
   const [amount, setAmount] = useState(state.currencyAmount);
@@ -51,7 +50,7 @@ export default function HomeScreen() {
       const response = await orderCreate(orderDataTest);
       dispatch({ type: "SET_AMOUNT", payload: amount });
       dispatch({ type: "CREATE_ORDER_FULFILLED", payload: response });
-      navigation.navigate('shareOptions');
+      router.push('/shareOptions');
     } catch (error: any) {
       dispatch({ type: "CREATE_ORDER_FAILURE", payload: error.message });
       console.error("Error al crear la orden:", error);
@@ -62,56 +61,62 @@ export default function HomeScreen() {
 
 
   return (
-    <View style={[GlobalStyles.container, GlobalStyles.padding, styles.between]}>
+    <KeyboardAvoidingView
+    behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    style={GlobalStyles.container}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={[GlobalStyles.container, GlobalStyles.padding, styles.between]}>
 
-      <View>
-        <View style={styles.mountContainer}>
-          <CustomCurrencyInput
-            amount={amount}
-            currency={abb}
-            symbol={symbol}
-            setAmount={setAmount}
-          />
-        </View>
+          <View>
+            <View style={styles.mountContainer}>
+              <CustomCurrencyInput
+                amount={amount}
+                currency={abb}
+                symbol={symbol}
+                setAmount={setAmount}
+              />
+            </View>
 
-        <View style={{gap: 10}}>
-          <CustomText
-            weight='700'
-            size={14}
-            color={Colors.blue}
-          >
-            Concepto
-          </CustomText>
+            <View style={{gap: 10}}>
+              <CustomText
+                weight='700'
+                size={14}
+                color={Colors.blue}
+              >
+                Concepto
+              </CustomText>
 
-          <TextInput
-            placeholder='Añade descripción del pago'
-            style={styles.textInput}
-            multiline
-            maxLength={MAX_CHARACTERS}
-            onChangeText={handleChange}
-          />
-          <CustomText size={12} color={Colors.textGrey} style={{textAlign: 'right'}}>
-            {noteLength + '/'+ MAX_CHARACTERS + ' caracteres'}
-          </CustomText>
-        </View>
-      </View>
+              <TextInput
+                placeholder='Añade descripción del pago'
+                style={styles.textInput}
+                multiline
+                maxLength={MAX_CHARACTERS}
+                onChangeText={handleChange}
+              />
+              <CustomText size={12} color={Colors.textGrey} style={{textAlign: 'right'}}>
+                {noteLength + '/'+ MAX_CHARACTERS + ' caracteres'}
+              </CustomText>
+            </View>
+          </View>
 
-      
-
-      <View>
-        <CustomButton handleClick={handleSubmit} disabled={amount === 0 || isLoading} style={styles.button}>
-          <CustomText
-            weight='600'
-            size={16}
-            color={amount === 0 ? Colors.check : Colors.white}
-          >
-            Continuar
-          </CustomText>
-          {isLoading && <ActivityIndicator animating={true} color={Colors.check} />}
-        </CustomButton>
-      </View>
           
-    </View>
+
+          
+          <CustomButton handleClick={handleSubmit} disabled={amount === 0 || isLoading} style={styles.button}>
+            <CustomText
+              weight='600'
+              size={16}
+              color={amount === 0 ? Colors.check : Colors.white}
+            >
+              Continuar
+            </CustomText>
+            {isLoading && <ActivityIndicator animating={true} color={Colors.check} />}
+          </CustomButton>
+          
+              
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 }
 
