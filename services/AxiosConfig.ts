@@ -1,10 +1,10 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "https://payments.pre-bnvo.com/api/v1/",
+  baseURL: process.env.EXPO_PUBLIC_BASEURL,
   headers: {
     "Content-Type": "multipart/form-data",
-    "X-Device-Id": "75e766d4-dd3a-44c3-a876-0acbe1c6d82c",
+    "X-Device-Id": process.env.EXPO_PUBLIC_XDEVICEID,
   },
 });
 
