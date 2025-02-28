@@ -15,7 +15,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.cajimenez.bitnovo"
     },
     "web": {
       "bundler": "metro",
@@ -36,6 +37,15 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "env": "production",
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "db7a9c56-9df5-4c36-9c4b-b021c23eb618"
+      }
     }
   }
 }

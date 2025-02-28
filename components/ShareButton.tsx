@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { DimensionValue, Pressable, StyleSheet, View } from 'react-native';
-import { Icon, TextInput } from 'react-native-paper';
+import { ActivityIndicator, Icon, TextInput } from 'react-native-paper';
 import CustomButton from './CustomButton';
 import CustomText from './CustomText';
 import { shareButtonIcon } from '@/constants/Images';
@@ -16,6 +16,7 @@ interface IShareButton {
   width?: DimensionValue;
   placeholder?: string;
   value?: string;
+  loading?: boolean;
   setValue?: (state: string) => void;
   handleClick: (value?: string) => void;
 }
@@ -26,6 +27,7 @@ const ShareButton = ({
   width = '100%',
   placeholder,
   value,
+  loading = false,
   handleClick,
   setValue,
 }: IShareButton) => {
@@ -85,20 +87,23 @@ const ShareButton = ({
 
   return (
     <View style={{width: width}}>
-      <Pressable style={styles.btnContainer} onPress={handleClickButton}>
+      <Pressable style={styles.btnContainer} onPress={handleClickButton} disabled={loading}>
         <View style={styles.iconContainer}>
           <Icon source={shareButtonIcon[type]} size={20} />
         </View>
         
         {!isEditing ? (
-          <CustomText
-            color={Colors.blue}
-            style={{flexShrink: 1}}
-            numberOfLines={1}
-            ellipsizeMode='tail'
-          >
-            {title}
-          </CustomText>
+          <View style={{flexDirection: 'row', alignItems: 'center', gap: 5}}>
+            <CustomText
+              color={Colors.blue}
+              style={{flexShrink: 1, width: '85%'}}
+              numberOfLines={1}
+              ellipsizeMode='tail'
+            >
+              {title}
+            </CustomText>
+            {loading && <ActivityIndicator animating={true} color={Colors.input} />}
+          </View>
         ) : (
           CustomInput
         )}

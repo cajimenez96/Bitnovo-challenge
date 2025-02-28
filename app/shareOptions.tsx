@@ -18,6 +18,7 @@ import CustomModal from '@/components/CustomModal';
 const shareOptions = () => {
   const { state, dispatch } = useCurrency();
 
+  const [sharing, setSharing] = useState(false); 
   const [openModal, setOpenModal] = useState(false); 
   const [email, setEmail] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
@@ -75,10 +76,20 @@ const shareOptions = () => {
     }
   };
 
-  const shareOthers =  () => {
-    Sharing.shareAsync(webUrl, {
+  const shareOthers = async () => {
+    setSharing(true);
+    await Sharing.shareAsync(webUrl, {
       dialogTitle: 'Compartir enlace',
-    });
+    })
+    .catch(() => {
+      Toast.show({
+        type: 'error',
+        text1: 'Ups! ocurrió un error.',
+        position: 'bottom'
+      });
+    })
+    .finally(() => setSharing(false))
+    
   }
   
   return (
@@ -126,6 +137,7 @@ const shareOptions = () => {
           <ShareButton
             title={"Compartir con otras aplicaciones"}
             type="link"
+            loading={sharing}
             handleClick={() => shareOthers()}
           />
           
