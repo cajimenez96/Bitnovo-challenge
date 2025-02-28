@@ -1,6 +1,14 @@
 import { useState } from 'react';
 import { router } from 'expo-router';
-import { StyleSheet, View, TextInput, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { 
+  StyleSheet,
+  View,
+  TextInput,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard
+} from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { useCurrency } from '@/context/CurrencyContext';
 import CustomText from '@/components/CustomText';
@@ -10,7 +18,6 @@ import { MAX_CHARACTERS } from '@/utils/utils';
 import CustomCurrencyInput from '@/components/CustomCurrencyInput';
 import { GlobalStyles } from '@/constants/GlobalStyles';
 import { Colors } from '@/constants/Colors';
-
 
 export default function HomeScreen() {
   const { state, dispatch } = useCurrency();
@@ -59,7 +66,6 @@ export default function HomeScreen() {
     }
   };
 
-
   return (
     <KeyboardAvoidingView
     behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -99,9 +105,6 @@ export default function HomeScreen() {
             </View>
           </View>
 
-          
-
-          
           <CustomButton
             handleClick={handleSubmit}
             disabled={amount === 0 || isLoading}
@@ -116,8 +119,6 @@ export default function HomeScreen() {
             </CustomText>
             {isLoading && <ActivityIndicator animating={true} color={Colors.check} />}
           </CustomButton>
-          
-              
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>

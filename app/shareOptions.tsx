@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Linking, ScrollView, StyleSheet, View } from 'react-native';
+import { Linking, ScrollView, Share, StyleSheet, View } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { Icon } from 'react-native-paper';
 import * as Clipboard from "expo-clipboard";
@@ -18,7 +18,8 @@ import CustomModal from '@/components/CustomModal';
 const shareOptions = () => {
   const { state, dispatch } = useCurrency();
 
-  const [sharing, setSharing] = useState(false); 
+  const [isSharing, setIsSharing] = useState(false); 
+  const [isWhatsapp, setIsWhatsapp] = useState(false);
   const [openModal, setOpenModal] = useState(false); 
   const [email, setEmail] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
@@ -51,20 +52,23 @@ const shareOptions = () => {
     );
   };
 
-  const sendToPhoneNumber = (phone: string) => {
+  const sendToPhoneNumber = async (phone: string) => {
+
     if (validatePhone(phone)) {
-      Linking.openURL(
-        `whatsapp://send?phone=${phone}&text=El link de pago para tu compra es: ${webUrl}`
-      )
-      .then(() => setOpenModal(true))
-      .catch(() => {
+      const url = `https://wa.me/${phone}?text=${webUrl}`
+      try {
+        Linking.openURL(url);
+        setOpenModal(true);
+      } catch (err) {
         Toast.show({
           type: 'error',
           text1: 'Error!',
           text2: 'Ha ocurrido un inconveniente.',
           position: 'bottom'
         });
-      });
+      } finally {
+        setIsWhatsapp(false)
+      }
 
     } else {
       Toast.show({
@@ -73,23 +77,20 @@ const shareOptions = () => {
         text2: 'Debe ingresar un número valido.',
         position: 'bottom'
       });
-    }
+    }    
   };
 
   const shareOthers = async () => {
-    setSharing(true);
-    await Sharing.shareAsync(webUrl, {
-      dialogTitle: 'Compartir enlace',
-    })
-    .catch(() => {
+    setIsSharing(true);
+    await Share.share({url: webUrl})
+    .catch(() =>  {
       Toast.show({
         type: 'error',
         text1: 'Ups! ocurrió un error.',
         position: 'bottom'
       });
     })
-    .finally(() => setSharing(false))
-    
+    .finally(() => setIsSharing(false));
   }
   
   return (
@@ -131,13 +132,14 @@ const shareOptions = () => {
             type="whatsapp"
             value={whatsapp}
             setValue={setWhatsapp}
+            loading={isWhatsapp}
             handleClick={(value) => sendToPhoneNumber(value)}
           />
 
           <ShareButton
             title={"Compartir con otras aplicaciones"}
             type="link"
-            loading={sharing}
+            loading={isSharing}
             handleClick={() => shareOthers()}
           />
           
@@ -220,6 +222,7 @@ const styles = StyleSheet.create({
   },
   content: {
     alignItems: 'center',
-    gap: 30
+    gap: 30,
+    marginBottom: 10
   },
 });

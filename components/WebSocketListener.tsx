@@ -38,13 +38,15 @@ const WebSocketListener = () => {
 
         // Si el pago se cancela, muestra un mensaje y redirige
         if (jsonData?.status === cancelledPaymentFlag) {
-          dispatch({ type: 'RESET_DATA' });
-          router.push('/');
           Toast.show({
             type: 'error',
             position: 'bottom',
             text1: 'Pago cancelado'
-          })
+          });
+          dispatch({ type: 'RESET_DATA' });
+          setTimeout((
+            () => router.push( '/')
+          ), 3000);
         }
       };
 

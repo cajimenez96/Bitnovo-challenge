@@ -87,7 +87,14 @@ const ShareButton = ({
 
   return (
     <View style={{width: width}}>
-      <Pressable style={styles.btnContainer} onPress={handleClickButton} disabled={loading}>
+      <Pressable
+        style={[
+          styles.btnContainer,
+          loading && styles.btnLoading
+        ]}
+        onPress={handleClickButton}
+        disabled={loading}
+      >
         <View style={styles.iconContainer}>
           <Icon source={shareButtonIcon[type]} size={20} />
         </View>
@@ -102,7 +109,6 @@ const ShareButton = ({
             >
               {title}
             </CustomText>
-            {loading && <ActivityIndicator animating={true} color={Colors.input} />}
           </View>
         ) : (
           CustomInput
@@ -152,6 +158,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.border,
   },
+  btnLoading: {
+    borderColor: Colors.input,
+   },
   iconContainer: {
     marginHorizontal: 20
   },

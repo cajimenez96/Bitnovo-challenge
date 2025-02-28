@@ -72,7 +72,6 @@ export default function RootLayout() {
               header: () => <HeaderSuccess />,
             }} />
         </Stack>
-        <WebSocketListener />
       </PaperProvider>
     </CurrencyProvider>
   );

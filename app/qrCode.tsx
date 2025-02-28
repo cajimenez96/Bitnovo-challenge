@@ -7,6 +7,7 @@ import CustomText from '@/components/CustomText';
 import CustomCurrencyInput from '@/components/CustomCurrencyInput';
 import { Images } from '@/constants/Images';
 import { Colors } from '@/constants/Colors';
+import WebSocketListener from '@/components/WebSocketListener';
 
 const qrCode = () => {
   const { state } = useCurrency();
@@ -26,6 +27,7 @@ const qrCode = () => {
 
   return (
     <View style={styles.container}>
+      <WebSocketListener />
       <View style={styles.infoContainer}>
         <Icon source={Images.infoCircle} size={20} />
         <CustomText size={12} color={Colors.blue} style={{width: '90%'}}>
