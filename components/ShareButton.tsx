@@ -100,16 +100,14 @@ const ShareButton = ({
         </View>
         
         {!isEditing ? (
-          <View style={{flexDirection: 'row', alignItems: 'center', gap: 5}}>
-            <CustomText
-              color={Colors.blue}
-              style={{flexShrink: 1, width: '85%'}}
-              numberOfLines={1}
-              ellipsizeMode='tail'
-            >
-              {title}
-            </CustomText>
-          </View>
+          <CustomText
+            color={Colors.blue}
+            style={{flexShrink: 1, width: '85%'}}
+            numberOfLines={1}
+            ellipsizeMode='tail'
+          >
+            {title}
+          </CustomText>
         ) : (
           CustomInput
         )}
